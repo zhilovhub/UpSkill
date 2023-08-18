@@ -7,10 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.upskill.media.RingtoneHelper
+import com.example.upskill.media.VibratorHelper
 
 
 class StartTimerViewModel(
-    val ringtoneHelper: RingtoneHelper
+    val ringtoneHelper: RingtoneHelper,
+    val vibratorHelper: VibratorHelper
 ) : ViewModel() {
 
     private var globalTime = 8000L
@@ -46,6 +48,7 @@ class StartTimerViewModel(
     fun stopTimer() {
         timer.cancel()
         ringtoneHelper.stop()
+        vibratorHelper.stop()
         _timerState.value = TimerState.INITIALIZED
         _currentTime.value = 8000L
         globalTime = 8000L
@@ -63,6 +66,7 @@ class StartTimerViewModel(
             override fun onFinish() {
                 _timerState.value = TimerState.FINISHED
                 ringtoneHelper.start()
+                vibratorHelper.start()
             }
         }
     }
@@ -71,7 +75,8 @@ class StartTimerViewModel(
         fun Factory(context: Context) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 val ringtoneHelper = RingtoneHelper(context)
-                return StartTimerViewModel(ringtoneHelper) as T
+                val vibratorHelper = VibratorHelper(context)
+                return StartTimerViewModel(ringtoneHelper, vibratorHelper) as T
             }
         }
 
