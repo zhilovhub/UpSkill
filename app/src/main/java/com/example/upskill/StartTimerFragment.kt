@@ -31,36 +31,43 @@ class StartTimerFragment : Fragment() {
             val timeString = getString(R.string.time_template, it)
             binding.timer.text = timeString
         }
-        viewModel.isRunning.observe(viewLifecycleOwner) {isRunning ->
-            if (isRunning) binding.startTimerBtn.setText(R.string.stop_btn)
-            else binding.startTimerBtn.setText(R.string.start_btn)
+        viewModel.timerState.observe(viewLifecycleOwner) {state ->
+            when(state) {
+                TimerState.RUNNING -> {
+                    binding.startTimerBtn.visibility = View.GONE
+                    binding.continueTimerBtn.visibility = View.GONE
+                    binding.pauseTimerBtn.visibility = View.VISIBLE
+                    binding.stopTimerBtn.isEnabled = true
+
+                    binding.pauseTimerBtn.visibility = View.VISIBLE
+                }
+                TimerState.PAUSED -> {
+                    binding.pauseTimerBtn.visibility = View.GONE
+                    binding.continueTimerBtn.visibility = View.VISIBLE
+                }
+                TimerState.STOPPED -> {
+                    binding.pauseTimerBtn.visibility = View.GONE
+                    binding.continueTimerBtn.visibility = View.GONE
+                    binding.startTimerBtn.visibility = View.VISIBLE
+                    binding.stopTimerBtn.isEnabled = false
+                }
+            }
         }
 
         binding.startTimerBtn.setOnClickListener {
-            binding.startTimerBtn.visibility = View.GONE
             viewModel.startTimer()
-            binding.pauseTimerBtn.visibility = View.VISIBLE
-            binding.stopTimerBtn.isEnabled = true
         }
 
         binding.pauseTimerBtn.setOnClickListener {
-            binding.pauseTimerBtn.visibility = View.GONE
-//            viewModel.startTimer()
-            binding.continueTimerBtn.visibility = View.VISIBLE
+            viewModel.pauseTimer()
         }
 
         binding.continueTimerBtn.setOnClickListener {
-            binding.continueTimerBtn.visibility = View.GONE
-//            viewModel.startTimer()
-            binding.pauseTimerBtn.visibility = View.VISIBLE
+            viewModel.continueTimer()
         }
 
         binding.stopTimerBtn.setOnClickListener {
-            binding.pauseTimerBtn.visibility = View.GONE
-            binding.continueTimerBtn.visibility = View.GONE
-//            viewModel.startTimer()
-            binding.startTimerBtn.visibility = View.VISIBLE
-            binding.stopTimerBtn.isEnabled = false
+            viewModel.stopTimer()
         }
     }
 }
