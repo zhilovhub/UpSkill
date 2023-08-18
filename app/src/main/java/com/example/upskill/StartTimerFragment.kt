@@ -26,9 +26,18 @@ class StartTimerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewModel.currentTime.observe(viewLifecycleOwner) {
             val timeString = getString(R.string.time_template, it)
             binding.timer.text = timeString
+        }
+        viewModel.isRunning.observe(viewLifecycleOwner) {isRunning ->
+            if (isRunning) binding.startTimerBtn.setText(R.string.stop_btn)
+            else binding.startTimerBtn.setText(R.string.start_btn)
+        }
+
+        binding.startTimerBtn.setOnClickListener {
+            viewModel.startTimer()
         }
     }
 }
