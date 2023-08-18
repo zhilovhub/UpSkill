@@ -1,12 +1,17 @@
 package com.example.upskill
 
+import android.content.Context
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.example.upskill.media.RingtoneHelper
 
 
-class StartTimerViewModel : ViewModel() {
+class StartTimerViewModel(
+    val ringtoneHelper: RingtoneHelper
+) : ViewModel() {
 
     private var globalTime = 8000L
 
@@ -14,7 +19,7 @@ class StartTimerViewModel : ViewModel() {
     val currentTime: LiveData<Long>
         get() = _currentTime
 
-    private val _timerState = MutableLiveData(TimerState.STOPPED)
+    private val _timerState = MutableLiveData(TimerState.INITIALIZED)
     val timerState: LiveData<TimerState>
         get() = _timerState
 
@@ -40,8 +45,10 @@ class StartTimerViewModel : ViewModel() {
 
     fun stopTimer() {
         timer.cancel()
-        _timerState.value = TimerState.STOPPED
-        _currentTime.value = 0L
+        ringtoneHelper.stop()
+        _timerState.value = TimerState.INITIALIZED
+        _currentTime.value = 8000L
+        globalTime = 8000L
     }
 
     private fun createTimer(): CountDownTimer {
@@ -54,9 +61,20 @@ class StartTimerViewModel : ViewModel() {
             }
 
             override fun onFinish() {
-                _timerState.value = TimerState.STOPPED
+                _timerState.value = TimerState.FINISHED
+                ringtoneHelper.start()
             }
         }
+    }
+
+    companion object {
+        fun Factory(context: Context) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                val ringtoneHelper = RingtoneHelper(context)
+                return StartTimerViewModel(ringtoneHelper) as T
+            }
+        }
+
     }
 
 }

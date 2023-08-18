@@ -19,7 +19,7 @@ class StartTimerFragment : Fragment() {
     ): View {
 
         binding = FragmentStartTimerBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this)[StartTimerViewModel::class.java]
+        viewModel = ViewModelProvider(this, StartTimerViewModel.Factory(requireContext().applicationContext))[StartTimerViewModel::class.java]
 
         return binding.root
     }
@@ -38,18 +38,26 @@ class StartTimerFragment : Fragment() {
                     binding.continueTimerBtn.visibility = View.GONE
                     binding.pauseTimerBtn.visibility = View.VISIBLE
                     binding.stopTimerBtn.isEnabled = true
-
-                    binding.pauseTimerBtn.visibility = View.VISIBLE
                 }
                 TimerState.PAUSED -> {
-                    binding.pauseTimerBtn.visibility = View.GONE
+                    binding.startTimerBtn.visibility = View.GONE
                     binding.continueTimerBtn.visibility = View.VISIBLE
-                }
-                TimerState.STOPPED -> {
                     binding.pauseTimerBtn.visibility = View.GONE
-                    binding.continueTimerBtn.visibility = View.GONE
+                    binding.stopTimerBtn.isEnabled = true
+                }
+                TimerState.INITIALIZED -> {
                     binding.startTimerBtn.visibility = View.VISIBLE
+                    binding.continueTimerBtn.visibility = View.GONE
+                    binding.pauseTimerBtn.visibility = View.GONE
                     binding.stopTimerBtn.isEnabled = false
+                    binding.pauseTimerBtn.isEnabled = true
+                }
+                TimerState.FINISHED -> {
+                    binding.startTimerBtn.visibility = View.GONE
+                    binding.continueTimerBtn.visibility = View.GONE
+                    binding.pauseTimerBtn.visibility = View.VISIBLE
+                    binding.stopTimerBtn.isEnabled = true
+                    binding.pauseTimerBtn.isEnabled = false
                 }
             }
         }
