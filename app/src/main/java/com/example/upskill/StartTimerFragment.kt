@@ -37,7 +37,30 @@ class StartTimerFragment : Fragment() {
         }
 
         binding.startTimerBtn.setOnClickListener {
+            binding.startTimerBtn.visibility = View.GONE
             viewModel.startTimer()
+            binding.pauseTimerBtn.visibility = View.VISIBLE
+            binding.stopTimerBtn.isEnabled = true
+        }
+
+        binding.pauseTimerBtn.setOnClickListener {
+            binding.pauseTimerBtn.visibility = View.GONE
+//            viewModel.startTimer()
+            binding.continueTimerBtn.visibility = View.VISIBLE
+        }
+
+        binding.continueTimerBtn.setOnClickListener {
+            binding.continueTimerBtn.visibility = View.GONE
+//            viewModel.startTimer()
+            binding.pauseTimerBtn.visibility = View.VISIBLE
+        }
+
+        binding.stopTimerBtn.setOnClickListener {
+            binding.pauseTimerBtn.visibility = View.GONE
+            binding.continueTimerBtn.visibility = View.GONE
+//            viewModel.startTimer()
+            binding.startTimerBtn.visibility = View.VISIBLE
+            binding.stopTimerBtn.isEnabled = false
         }
     }
 }
