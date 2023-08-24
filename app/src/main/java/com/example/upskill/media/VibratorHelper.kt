@@ -3,7 +3,7 @@ package com.example.upskill.media
 import android.content.Context
 import android.os.Vibrator
 
-class g(private val context: Context) {
+class VibratorHelper(private val context: Context) {
 
     private var vibrator: Vibrator? = null
 
