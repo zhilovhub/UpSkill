@@ -4,10 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity("left_time")
-data class LeftTime(
+@Entity("skill_table")
+data class Skill(
     @PrimaryKey
-    @ColumnInfo(name = "skillName")
+    @ColumnInfo(name = "skill_name")
     val skillName: String,
 
     @ColumnInfo(name = "time")
