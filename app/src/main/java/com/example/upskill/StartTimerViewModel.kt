@@ -6,13 +6,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.upskill.database.SkillDao
+import com.example.upskill.database.SkillRoomDatabase
 import com.example.upskill.media.RingtoneHelper
 import com.example.upskill.media.VibratorHelper
 
 
 class StartTimerViewModel(
-    val ringtoneHelper: RingtoneHelper,
-    val vibratorHelper: VibratorHelper
+    private val ringtoneHelper: RingtoneHelper,
+    private val vibratorHelper: VibratorHelper,
+    private val skillDao: SkillDao
 ) : ViewModel() {
 
     private var globalTime = 8000L
@@ -76,7 +79,8 @@ class StartTimerViewModel(
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 val ringtoneHelper = RingtoneHelper(context)
                 val vibratorHelper = VibratorHelper(context)
-                return StartTimerViewModel(ringtoneHelper, vibratorHelper) as T
+                val skillDao = SkillRoomDatabase.getDatabase(context).skillDao()
+                return StartTimerViewModel(ringtoneHelper, vibratorHelper, skillDao) as T
             }
         }
 
