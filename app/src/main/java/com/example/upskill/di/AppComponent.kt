@@ -1,6 +1,11 @@
 package com.example.upskill.di
 
+import com.example.upskill.StartTimerFragment
 import dagger.Component
 
-@Component
-interface AppComponent
+@Component(modules = [AppModule::class])
+interface AppComponent {
+
+    fun inject(fragment: StartTimerFragment)
+
+}
